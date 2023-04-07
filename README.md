@@ -1,3 +1,3 @@
 # Cybersecurity-and-DevOps-Final-Project
 
-<img src="[my_image.png](https://github.com/nikcladis/Cybersecurity-and-DevOps-Project-Code.Hub/blob/main/Images/devsecops.png)" alt="my_image" width="200" height="200">
+<img src="https://github.com/nikcladis/Cybersecurity-and-DevOps-Project-Code.Hub/blob/main/Images/devsecops.png" alt="my_image" width="200" height="200">
