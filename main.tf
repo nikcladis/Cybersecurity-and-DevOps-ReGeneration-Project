@@ -131,6 +131,27 @@ resource "azurerm_linux_virtual_machine" "main" {
     sku       = "22_04-lts-gen2"
     version   = "latest"
   }
+
+  provisioner "remote-exec" {
+    inline = [
+      "curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee /usr/share/keyrings/jenkins-keyring.asc > /dev/null",
+      "echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] https://pkg.jenkins.io/debian binary/ | sudo tee /etc/apt/sources.list.d/jenkins.list > /dev/null",
+      "sudo apt update",
+      #"sleep 5",
+      "sudo apt install openjdk-11-jre -y",
+      #"sleep 5",
+      #"sudo apt-get update",
+      #"sleep 5",
+      "sudo apt-get install jenkins -y",
+    ]
+
+    connection {
+      type        = "ssh"
+      user        = var.admin_username
+      private_key = "${file("id_rsa")}"
+      host        = azurerm_public_ip.main.ip_address
+    }
+  }
 }
 
 resource "azurerm_public_ip" "main" {
@@ -140,17 +161,3 @@ resource "azurerm_public_ip" "main" {
   allocation_method   = "Static"
 }
 
-#resource "azurerm_virtual_machine_extension" "jenkins_terraform" {
-#  name                 = "jenkins_extension"
-#  virtual_machine_id   = azurerm_linux_virtual_machine.main.id
-#  publisher            = "Microsoft.Azure.Extensions"
-#  type                 = "CustomScript"
-#  type_handler_version = "2.1"
-#
-#  settings = <<SETTINGS
-#  {
-#          "fileUris": ["https://raw.githubusercontent.com/nikcladis/Cybersecurity-and-DevOps-Project-Code.Hub/litsos/cloud-init-jenkins.sh"],
-#          "commandToExecute": "sh cloud-init-jenkins.sh"
-#      }
-#SETTINGS
-#}
