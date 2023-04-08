@@ -140,17 +140,17 @@ resource "azurerm_public_ip" "main" {
   allocation_method   = "Static"
 }
 
-resource "azurerm_virtual_machine_extension" "jenkins_terraform" {
-  name                 = "jenkins_extension"
-  virtual_machine_id   = azurerm_linux_virtual_machine.main.id
-  publisher            = "Microsoft.Azure.Extensions"
-  type                 = "CustomScript"
-  type_handler_version = "2.0"
-
-  settings = <<SETTINGS
-  {
-          "fileUris": ["https://raw.githubusercontent.com/nikcladis/Cybersecurity-and-DevOps-Project-Code.Hub/litsos/cloud-init-jenkins.sh"],
-          "commandToExecute": "sh cloud-init-jenkins.sh"
-      }
-SETTINGS
-}
+#resource "azurerm_virtual_machine_extension" "jenkins_terraform" {
+#  name                 = "jenkins_extension"
+#  virtual_machine_id   = azurerm_linux_virtual_machine.main.id
+#  publisher            = "Microsoft.Azure.Extensions"
+#  type                 = "CustomScript"
+#  type_handler_version = "2.1"
+#
+#  settings = <<SETTINGS
+#  {
+#          "fileUris": ["https://raw.githubusercontent.com/nikcladis/Cybersecurity-and-DevOps-Project-Code.Hub/litsos/cloud-init-jenkins.sh"],
+#          "commandToExecute": "sh cloud-init-jenkins.sh"
+#      }
+#SETTINGS
+#}
