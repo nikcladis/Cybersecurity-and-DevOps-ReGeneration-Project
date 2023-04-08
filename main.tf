@@ -108,7 +108,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                = "${var.prefix}-team3-ci-vm"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  size                = "Standard_F2"
+  size                = "Standard_B1s"
   admin_username      = var.admin_username
   computer_name       = "team3ci"
   network_interface_ids = [
@@ -143,9 +143,9 @@ resource "azurerm_public_ip" "main" {
 resource "azurerm_virtual_machine_extension" "jenkins_terraform" {
   name                 = "jenkins_extension"
   virtual_machine_id   = azurerm_linux_virtual_machine.main.id
-  publisher            = "Microsoft.OSTCExtensions"
-  type                 = "CustomScriptForLinux"
-  type_handler_version = "1.2"
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.0"
 
   settings = <<SETTINGS
   {
