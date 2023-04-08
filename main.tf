@@ -111,7 +111,6 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                = "Standard_F2"
   admin_username      = var.admin_username
   computer_name       = "team3ci"
-  custom_data         = filebase64("cloud-init-jenkins.txt")
   network_interface_ids = [
     azurerm_network_interface.main.id
   ]
@@ -143,17 +142,15 @@ resource "azurerm_public_ip" "main" {
 
 resource "azurerm_virtual_machine_extension" "jenkins_terraform" {
   name                 = "jenkins_extension"
-  location             = "${var.location}"
-  resource_group_name  =  azurerm_resource_group.main.name
-  virtual_machine_name = azurerm_virtual_machine.jenkins.name
+  virtual_machine_id   = azurerm_linux_virtual_machine.main.id
   publisher            = "Microsoft.OSTCExtensions"
   type                 = "CustomScriptForLinux"
   type_handler_version = "1.2"
 
   settings = <<SETTINGS
   {
-          "fileUris": ["https://raw.githubusercontent.com/xenonstack/terraform-jenkins-azure/master/jenkins-init.sh"],
-          "commandToExecute": "sh jenkins-init.sh"
+          "fileUris": ["https://raw.githubusercontent.com/nikcladis/Cybersecurity-and-DevOps-Project-Code.Hub/litsos/cloud-init-jenkins.sh"],
+          "commandToExecute": "sh cloud-init-jenkins.sh"
       }
 SETTINGS
 }
