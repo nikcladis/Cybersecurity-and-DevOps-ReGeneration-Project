@@ -1,3 +1,3 @@
-location = "northeurope"
-prefix   = "regen"
+location       = "northeurope"
+prefix         = "regen"
 admin_username = "adminusername"

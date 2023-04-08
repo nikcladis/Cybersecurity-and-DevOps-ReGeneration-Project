@@ -8,7 +8,7 @@ terraform {
       version = "=3.0.0"
     }
     tls = {
-      source = "hashicorp/tls"
+      source  = "hashicorp/tls"
       version = "~>4.0"
     }
   }
@@ -70,6 +70,18 @@ resource "azurerm_network_security_group" "main" {
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
+
+  security_rule {
+    name                       = "AllowHTTP"
+    priority                   = 200
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8080"
+    source_address_prefix      = "Internet"
+    destination_address_prefix = "*"
+  }
 }
 
 
@@ -80,10 +92,10 @@ resource "tls_private_key" "example_ssh" {
 }
 
 resource "local_file" "private_key" {
-  content = tls_private_key.example_ssh.private_key_pem
-  filename = "id_rsa"
+  content         = tls_private_key.example_ssh.private_key_pem
+  filename        = "id_rsa"
   file_permission = "0600"
-  
+
 }
 
 # Connect the security group to the network interface
@@ -99,6 +111,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   size                = "Standard_F2"
   admin_username      = var.admin_username
   computer_name       = "team3ci"
+  custom_data         = filebase64("cloud-init-jenkins.txt")
   network_interface_ids = [
     azurerm_network_interface.main.id
   ]
@@ -126,4 +139,21 @@ resource "azurerm_public_ip" "main" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   allocation_method   = "Static"
+}
+
+resource "azurerm_virtual_machine_extension" "jenkins_terraform" {
+  name                 = "jenkins_extension"
+  location             = "${var.location}"
+  resource_group_name  =  azurerm_resource_group.main.name
+  virtual_machine_name = azurerm_virtual_machine.jenkins.name
+  publisher            = "Microsoft.OSTCExtensions"
+  type                 = "CustomScriptForLinux"
+  type_handler_version = "1.2"
+
+  settings = <<SETTINGS
+  {
+          "fileUris": ["https://raw.githubusercontent.com/xenonstack/terraform-jenkins-azure/master/jenkins-init.sh"],
+          "commandToExecute": "sh jenkins-init.sh"
+      }
+SETTINGS
 }
