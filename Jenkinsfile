@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_REGISTRY = 'docker.io'
-        DOCKER_IMAGE_NAME = 'nikcladis/regeneration-sysdevops-project'
-    }
-
     stages {
         stage('Clone repository') {
             steps {
@@ -24,19 +19,19 @@ pipeline {
                 archiveArtifacts 'target/*.jar'
             }
         }
-
-        stage('Build Docker image') {
+        
+        stage('Build Docker Image') {
             steps {
-                sh 'docker build -t $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME .'
+                sh 'docker build -t nikcladis/app .'
             }
         }
-
-        stage('Push Docker image to Docker Hub') {
+        
+        stage('Push Docker Image') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh "docker login $DOCKER_REGISTRY -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
+                withCredentials([string(credentialsId: 'dockerhub', variable: 'dockerhubpwd')]) {
+                sh 'docker login -u nikcladis -p ${dockerhubpwd}'
+                sh 'docker push nikcladis/app'
                 }
-                sh "docker push $DOCKER_REGISTRY/$DOCKER_IMAGE_NAME"
             }
         }
     }
