@@ -1,8 +1,8 @@
-### Taks Completed:
-- Step 1: Create an Ubuntu VM with Terraform on Azure. This is going to be the CI Server. This step needs to only run once.
+## Taks Completed:
+### Step 1: Create an Ubuntu VM with Terraform on Azure. This is going to be the CI Server. This step needs to only run once.
     - [x] Task 1: Install Jenkins on this VM and any tool required to complete the next steps.
     - [x] Task 2: All the following steps that are controlled by Jenkins are to be run on this VM as a pipeline.
-- Step 2: Setup the Java source code of the application within your GitHub account.
+### Step 2: Setup the Java source code of the application within your GitHub account.
     - [x] Task 1: The GitHub repository of the web application is the following: https://github.com/codehub-learn/toDoAppWithLogin-Regeneration-CyberSecurity-DevOps
     - [x] Task 2: Fork this repository into a GitHub account of your own.
 - Step 3: Create a JAR file from the Java source code.
