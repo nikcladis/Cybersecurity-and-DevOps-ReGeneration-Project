@@ -36,16 +36,18 @@
     - [ ] Task 3: When running, ensure that MySQL starts first so that the Application can see it when it starts. The MySQL server version should be 5.
     
     - [ ] Task 4: For the Web Application, the following environment variables can be set:
-                    a. DB_HOST, default value is localhost,
-                    b. DB_PORT, default value is 3306,
-                    c. DB_USER, default value is root,
-                    d. DB_USER_PASSWORD, default value is root
+    
+                    - a. DB_HOST, default value is localhost,
+                    - b. DB_PORT, default value is 3306,
+                    - c. DB_USER, default value is root,
+                    - d. DB_USER_PASSWORD, default value is root
                     
     - [ ] Task 5: The application process listens to port 8080, therefore the internal container port should be set to 8080.
     
     - [ ] Task 6: If everything is running, check from a browser that the application has been deployed on Azure and is accessible. To login into the application, use the following credentials:
-                    a. Username: admin,
-                    b. Password: admin
+    
+                    - a. Username: admin,
+                    - b. Password: admin
                     
 - Step 7: Setup Jenkins so that when a change takes place in your Java code on GitHub, then the new version of the application is automatically deployed on Azure and is reflected in the production instance. In order to test this functionality, add a comment within any of the Java files. You can add comments by typing “//” followed by your comment, i.e. “// This is a comment.”.
 
