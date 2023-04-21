@@ -43,6 +43,7 @@
     - name: Install Docker Module for Web App
       docker_image:
         name: "neph3l1m/app"
+        force_source: yes
         source: pull
 
     - name: Create Docker Network 
