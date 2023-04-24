@@ -108,7 +108,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   name                = "${var.prefix}-team3-ci-vm"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
-  size                = "Standard_B1s"
+  size                = "Standard_B1ms"
   admin_username      = var.admin_username
   computer_name       = "team3ci"
   network_interface_ids = [
