@@ -1,0 +1,55 @@
+pipeline {
+    agent any
+    environment {
+        AZURE_CREDENTIALS = credentials('Azure')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/MichaelDee98/Terraform-Pipeline']])
+            }
+
+        }
+        stage('Az Login'){
+            steps{
+                sh 'az login --username $AZURE_CREDENTIALS_USR --password $AZURE_CREDENTIALS_PSW'
+            }
+        }
+        stage('Terraform init') {
+            steps {
+                sh 'terraform init'
+            }
+
+        }
+        stage('Terraform Plan') {
+            steps {
+                sh 'terraform plan'
+            }
+        }
+        stage('Terraform Apply') {
+            steps {
+                sh 'terraform apply --auto-approve'
+            }
+        }
+        stage('Moving private key') {
+            steps {
+                sh 'sudo mv /var/lib/jenkins/workspace/Terraform/id_rsa /root/.ssh/'
+            }
+        }
+        stage('Az Logout'){
+            steps{
+                sh 'az logout'
+            }
+        }
+        stage('Wait for 10 seconds'){
+            steps{
+                sh 'sleep 10'
+            }
+        }
+        stage('Deploy Ansible'){
+            steps{
+                sh 'sudo ansible-playbook playbook.yml -i inventory/hosts.ini --key-file "/root/.ssh/id_rsa"'
+            }
+        }
+    }
+}
